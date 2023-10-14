@@ -5,6 +5,8 @@ import { Dog } from "../../types/dog";
 //Styles
 import "../../globalStyles/shared.scss";
 import "./styles.scss";
+import IconButton from "../../components/atoms/IconButton";
+import { faArrowDownAZ } from "@fortawesome/free-solid-svg-icons";
 
 function Home() {
   const dogList: Dog[] = [
@@ -51,6 +53,13 @@ function Home() {
   ];
   return (
     <div className="base-page home-container">
+      <div className="home-container__actions-container">
+        <IconButton
+          title="Sort DSC"
+          iconName={faArrowDownAZ}
+          onPress={() => null}
+        />
+      </div>
       <div className="home-container__list-container">
         {dogList.map((dog) => (
           <ListCard key={dog.id} dogData={dog} />
