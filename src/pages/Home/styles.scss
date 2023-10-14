@@ -2,8 +2,13 @@
 
   &__actions-container {
     display: flex;
+    align-items: center;
     flex-direction: row;
     margin-bottom: 25px;
+  }
+
+  &__sort-container{
+    margin-right: 10px;
   }
 
   &__list-container {

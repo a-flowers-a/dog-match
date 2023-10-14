@@ -1,0 +1,21 @@
+@use 'src/globalStyles/colors.scss' as colors;
+
+.filter-select-container {
+  display: flex;
+  align-items: center;
+  background-color: colors.$white;
+  border-radius: 10px;
+  padding: 5px;
+  height: 40px;
+  max-width: 150px;
+
+  &__icon-container{
+    margin-right: 5px;
+  }
+
+  &__select{
+    background-color: transparent;
+    border: none;
+  }
+
+}

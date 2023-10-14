@@ -4,11 +4,19 @@ import { IconButtonProps } from "./types";
 //Styles
 import "./styles.scss";
 
-function IconButton({ iconName, size, title }: IconButtonProps) {
+function IconButton({
+  containerStyles,
+  iconName,
+  size,
+  title,
+}: IconButtonProps) {
   return (
-    <button aria-label={title} className="icon-buton-container">
+    <button
+      aria-label={title}
+      className={`icon-buton-container ${containerStyles}`}
+    >
       <FontAwesomeIcon size={size} icon={iconName} />
-      <span>{title}</span>
+      <span className="icon-buton-container__title">{title}</span>
     </button>
   );
 }

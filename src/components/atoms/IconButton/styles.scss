@@ -10,10 +10,14 @@
   color: colors.$text-primary;
   border-radius: 10px;
   min-height: 40px;
-  max-width: 50px;
+  max-width: 100px;
   padding: 5px;
 
   &:hover{
     background-color: colors.$grey;
+  }
+
+  &__title{
+    font-size: 12px;
   }
 }

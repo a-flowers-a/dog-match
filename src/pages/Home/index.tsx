@@ -1,12 +1,13 @@
+import { faArrowDownAZ } from "@fortawesome/free-solid-svg-icons";
 //Components
 import ListCard from "../../components/molecules/ListCard";
+import IconButton from "../../components/atoms/IconButton";
+import FilterSelect from "../../components/molecules/FilterSelect";
 //Types
 import { Dog } from "../../types/dog";
 //Styles
 import "../../globalStyles/shared.scss";
 import "./styles.scss";
-import IconButton from "../../components/atoms/IconButton";
-import { faArrowDownAZ } from "@fortawesome/free-solid-svg-icons";
 
 function Home() {
   const dogList: Dog[] = [
@@ -55,9 +56,27 @@ function Home() {
     <div className="base-page home-container">
       <div className="home-container__actions-container">
         <IconButton
+          containerStyles="home-container__sort-container"
           title="Sort DSC"
           iconName={faArrowDownAZ}
           onPress={() => null}
+        />
+        <FilterSelect
+          options={[
+            {
+              value: "labrador",
+              label: "labrador",
+            },
+            {
+              value: "golden",
+              label: "golden",
+            },
+            {
+              value: "poochie",
+              label: "poochie",
+            },
+          ]}
+          handleOnChange={(event) => console.log(event.target.value)}
         />
       </div>
       <div className="home-container__list-container">
