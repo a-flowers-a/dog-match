@@ -2,8 +2,9 @@ import { ChangeEvent, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaw } from "@fortawesome/free-solid-svg-icons";
 //Types
-import { LoginCardProps, LoginData } from "./types";
+import { LoginCardProps } from "./types";
 import { InputName } from "../../../constants/inputs";
+import { LoginData } from "../../../types/authentication";
 //Styles
 import "./styles.scss";
 

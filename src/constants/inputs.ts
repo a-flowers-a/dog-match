@@ -1,5 +1,5 @@
 export enum InputName {
   BreedSelect = "breedSelect",
-  Mail = "mail",
+  Mail = "email",
   Name = "name",
 }
