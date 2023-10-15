@@ -1,8 +1,10 @@
-import { faArrowDownAZ } from "@fortawesome/free-solid-svg-icons";
+import { faArrowDownAZ, faPaw } from "@fortawesome/free-solid-svg-icons";
 //Components
 import ListCard from "../../components/molecules/ListCard";
 import IconButton from "../../components/atoms/IconButton";
 import FilterSelect from "../../components/molecules/FilterSelect";
+import Paginator from "../../components/atoms/Paginator";
+import CustomButton from "../../components/atoms/CustomButton";
 //Types
 import { Dog } from "../../types/dog";
 //Styles
@@ -83,6 +85,19 @@ function Home() {
         {dogList.map((dog) => (
           <ListCard key={dog.id} dogData={dog} />
         ))}
+        <div className="home-container__paginator-container">
+          <Paginator
+            pagesData={{ total: 30, currentPage: 1 }}
+            handlePagination={() => null}
+          />
+        </div>
+      </div>
+      <div className="home-container__match-btn-container">
+        <CustomButton
+          iconName={faPaw}
+          title="generate match"
+          handlePress={() => null}
+        />
       </div>
     </div>
   );
