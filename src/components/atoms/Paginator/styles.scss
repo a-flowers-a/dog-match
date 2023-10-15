@@ -1,0 +1,36 @@
+@use 'src/globalStyles/colors.scss' as colors;
+
+.paginator-container {
+  display: flex;
+  width: 100%;
+  margin-top: 15px;
+  justify-content: center;
+
+  &__btn{
+    background-color: colors.$secondary;
+    color: colors.$white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    &:hover:enabled {
+      border-style: solid;
+      border-color: colors.$text-primary;
+      border-width: 2px;
+    }
+    &:disabled{
+      background-color: colors.$grey;
+      color: colors.$text-primary;
+      cursor  : default;
+    }
+  }
+
+  &__counter{
+    padding: 10px 15px;
+    margin: 0 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: colors.$white;
+  }
+}
