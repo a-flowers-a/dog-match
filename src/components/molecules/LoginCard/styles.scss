@@ -50,8 +50,15 @@
     border-color: colors.$secondary;
 
     &:hover:enabled {
-      border-color: colors.$text-primary;
       box-shadow: rgba(0, 0, 0, 0.25) 0px 10px 10px;
+      cursor: pointer;
+    }
+    &:disabled{
+      background-color: colors.$grey;
+      color: colors.$text-primary;
+      border-color: colors.$grey;
+      box-shadow: none;
+      cursor: default;
     }
   }
 }
