@@ -10,6 +10,7 @@ import IconButton from "../../components/atoms/IconButton";
 import FilterSelect from "../../components/molecules/FilterSelect";
 import Paginator from "../../components/atoms/Paginator";
 import CustomButton from "../../components/atoms/CustomButton";
+import MatchModal from "../../components/molecules/MatchModal";
 //helpers
 import {
   generateBreedSelectOptions,
@@ -41,6 +42,27 @@ function Home() {
   const iconName = useMemo(
     () => (currSort === SortType.ASC ? faArrowDownAZ : faArrowDownZA),
     [currSort]
+  );
+  const showMatchedDog = matchedDog && displayMatch;
+
+  /**
+   * Adds/removes DogId to/from the fav array.
+   * If it's not in the favArr it's added, otherwise removed
+   */
+  const handleAddFav = useCallback(
+    (favId: string) => {
+      const foundIndex = favoriteIds.indexOf(favId);
+      if (foundIndex === -1) {
+        setFavoriteIds((prevFavs) => [...prevFavs, favId]);
+      } else {
+        setFavoriteIds(
+          favoriteIds
+            .slice(0, foundIndex)
+            .concat(favoriteIds.slice(foundIndex + 1))
+        );
+      }
+    },
+    [favoriteIds]
   );
 
   /**
@@ -151,6 +173,12 @@ function Home() {
 
   return (
     <div className="base-page home-container">
+      {showMatchedDog && (
+        <MatchModal
+          handleOnPress={() => setDisplayMatch(false)}
+          dogData={matchedDog}
+        />
+      )}
       <div className="home-container__actions-container">
         <IconButton
           containerStyles="home-container__sort-container"
@@ -165,7 +193,11 @@ function Home() {
       </div>
       <div className="home-container__list-container">
         {dogstToShow.map((dog) => (
-          <ListCard key={dog.id} dogData={dog} />
+          <ListCard
+            key={dog.id}
+            dogData={dog}
+            handleOnPress={() => handleAddFav(dog.id)}
+          />
         ))}
         <div className="home-container__paginator-container">
           <Paginator

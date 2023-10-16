@@ -63,6 +63,7 @@ function MatchModal({ dogData, handleOnPress }: MatchModalProps) {
           <button
             aria-label="close-modal-button"
             className="match-modal-container__button"
+            onClick={handleOnPress}
           >
             Close
           </button>

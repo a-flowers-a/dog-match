@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   faCakeCandles,
   faHeart,
@@ -10,10 +11,26 @@ import { Color } from "../../../types/colors";
 //Styles
 import "./styles.scss";
 
-function ListCard({ dogData }: ListCardProps) {
-  const favColor = false ? Color.secondary : Color.grey;
+function ListCard({ dogData, handleOnPress }: ListCardProps) {
+  /**
+   * NOTE: to know the real starting fav state, this should be passed in dogData
+   * otherwise, every rerender, the visual state of fav will be false
+   */
+  const [isVisuallyFav, setIsVisuallyFav] = useState(false);
+
+  const favColor = isVisuallyFav ? Color.secondary : Color.grey;
+
+  /**
+   * Changes the visual fav state and calls the parent callback to handle
+   * fav logic
+   */
+  function handleOnClick() {
+    setIsVisuallyFav((prevVal) => !prevVal);
+    handleOnPress();
+  }
+
   return (
-    <div className="list-card-container">
+    <button className="list-card-container" onClick={handleOnClick}>
       <div className="list-card-container__img-container">
         <img
           className="list-card-container__img"
@@ -22,8 +39,8 @@ function ListCard({ dogData }: ListCardProps) {
         />
       </div>
       <div className="list-card-container__info-container">
-        <div className="list-card-container__main">{dogData.name}</div>
-        <div className="list-card-container__subtitle">{dogData.breed}</div>
+        <span className="list-card-container__main">{dogData.name}</span>
+        <span className="list-card-container__subtitle">{dogData.breed}</span>
         <div className="list-card-container__body-container">
           <div className="list-card-container__body-item">
             <FontAwesomeIcon
@@ -45,10 +62,10 @@ function ListCard({ dogData }: ListCardProps) {
           </div>
         </div>
       </div>
-      <button className="list-card-container__fav-container">
+      <div className="list-card-container__fav-container">
         <FontAwesomeIcon size="2x" icon={faHeart} color={favColor} />
-      </button>
-    </div>
+      </div>
+    </button>
   );
 }
 
