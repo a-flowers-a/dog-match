@@ -1,6 +1,6 @@
 import HttppAgent from "./HtppAgent";
 import { BaseUrl } from "../constants/services";
-import { Dog, DogsIdsResponse } from "../types/dog";
+import { Dog, DogsIdsResponse, MatchResponse } from "../types/dog";
 
 /**
  * Performs GET reuest to get list of breeds
@@ -50,4 +50,21 @@ export function getDogs(dogsIds: string[]): Promise<Dog[]> {
     withCredentials: true,
     data: dogsIds,
   }) as Promise<Dog[]>;
+}
+
+/**
+ * Performs POST request to get a match with the passed favorite
+ * dogs ids
+ * @param dogsIds array with the dog's ids to select a match from
+ * @returns Promise match dog id
+ */
+export function matchDogs(dogsIds: string[]): Promise<MatchResponse> {
+  const url = `${BaseUrl}/dogs/match`;
+  const axiosAgent = HttppAgent.getAgent();
+  return axiosAgent.doRequest({
+    method: "POST",
+    url,
+    withCredentials: true,
+    data: dogsIds,
+  }) as Promise<MatchResponse>;
 }

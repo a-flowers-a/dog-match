@@ -18,7 +18,7 @@ import {
   sortDogsAlphabetically,
 } from "../../helpers/utils";
 //Services
-import { getBreeds, getDogsIDs, getDogs } from "../../services/dog";
+import { getBreeds, getDogsIDs, getDogs, matchDogs } from "../../services/dog";
 //Types
 import { Dog } from "../../types/dog";
 import { SelectItem, SortType } from "../../types/general";
@@ -33,6 +33,9 @@ function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalDogs, setTotalDogs] = useState(0);
   const [currSort, setCurrSort] = useState<SortType>(SortType.ASC);
+  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+  const [matchedDog, setMatchedDog] = useState<Dog>();
+  const [displayMatch, setDisplayMatch] = useState(false);
 
   const totalPages = useMemo(() => getMaxNumPages(totalDogs), [totalDogs]);
   const iconName = useMemo(
@@ -97,6 +100,21 @@ function Home() {
   );
 
   /**
+   * Calls to generate a match, get the dog info
+   * and displays the result
+   */
+  const handleGenerateMatch = useCallback(async () => {
+    try {
+      const matchRes = await matchDogs(favoriteIds);
+      const recDog = await getDogs([matchRes.match]);
+      setMatchedDog(recDog[0]);
+      setDisplayMatch(true);
+    } catch (error) {
+      console.log("error at handleGenerateMatch", error);
+    }
+  }, [favoriteIds]);
+
+  /**
    * Gets the elements pagination needed and performs the requests to get the
    * new dogs to show
    */
@@ -158,9 +176,10 @@ function Home() {
       </div>
       <div className="home-container__match-btn-container">
         <CustomButton
+          disabled={favoriteIds.length < 1}
           iconName={faPaw}
           title="generate match"
-          handlePress={() => null}
+          handlePress={handleGenerateMatch}
         />
       </div>
     </div>

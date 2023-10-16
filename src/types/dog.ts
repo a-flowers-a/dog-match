@@ -13,3 +13,7 @@ export interface DogsIdsResponse {
   next: number;
   prev: number;
 }
+
+export interface MatchResponse {
+  match: string;
+}
