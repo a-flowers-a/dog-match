@@ -1,8 +1,10 @@
 import { ElementsPerPage } from "../constants/dog";
+import { SortType } from "../types/general";
 import {
   generateBreedSelectOptions,
   getMaxNumPages,
   getPageAndOffset,
+  sortDogsAlphabetically,
 } from "./utils";
 
 describe("All utils tests", () => {
@@ -68,14 +70,133 @@ describe("All utils tests", () => {
     test("Page 10 and go to next", () => {
       expect(getPageAndOffset("next", 10, 11)).toEqual({
         nextPage: 11,
-        nextOffset: 300,
+        nextOffset: 250,
       });
     });
     test("Max page and go to next", () => {
       expect(getPageAndOffset("next", 10, 10)).toEqual({
         nextPage: 10,
-        nextOffset: 270,
+        nextOffset: 225,
       });
+    });
+  });
+
+  describe("All sortDogsAlphabetically tests", () => {
+    test("empty", () => {
+      expect(sortDogsAlphabetically([])).toEqual([]);
+    });
+    test("ASC", () => {
+      expect(
+        sortDogsAlphabetically([
+          {
+            img: "https://frontend-take-home.fetch.com/dog-images/n02110627-affenpinscher/n02110627_10225.jpg",
+            name: "Yolanda",
+            age: 13,
+            breed: "Affenpinscher",
+            zip_code: "21056",
+            id: "NXGFTIcBOvEgQ5OCx8A1",
+          },
+          {
+            img: "https://frontend-take-home.fetch.com/dog-images/n02110627-affenpinscher/n02110627_10437.jpg",
+            name: "Wendell",
+            age: 1,
+            breed: "Affenpinscher",
+            zip_code: "06104",
+            id: "NnGFTIcBOvEgQ5OCx8A1",
+          },
+          {
+            img: "https://frontend-take-home.fetch.com/dog-images/n02110627-affenpinscher/n02110627_11365.jpg",
+            name: "Lea",
+            age: 11,
+            breed: "Affenpinscher",
+            zip_code: "36032",
+            id: "RHGFTIcBOvEgQ5OCx8A1",
+          },
+        ])
+      ).toEqual([
+        {
+          img: "https://frontend-take-home.fetch.com/dog-images/n02110627-affenpinscher/n02110627_11365.jpg",
+          name: "Lea",
+          age: 11,
+          breed: "Affenpinscher",
+          zip_code: "36032",
+          id: "RHGFTIcBOvEgQ5OCx8A1",
+        },
+        {
+          img: "https://frontend-take-home.fetch.com/dog-images/n02110627-affenpinscher/n02110627_10437.jpg",
+          name: "Wendell",
+          age: 1,
+          breed: "Affenpinscher",
+          zip_code: "06104",
+          id: "NnGFTIcBOvEgQ5OCx8A1",
+        },
+        {
+          img: "https://frontend-take-home.fetch.com/dog-images/n02110627-affenpinscher/n02110627_10225.jpg",
+          name: "Yolanda",
+          age: 13,
+          breed: "Affenpinscher",
+          zip_code: "21056",
+          id: "NXGFTIcBOvEgQ5OCx8A1",
+        },
+      ]);
+    });
+    test("ASC", () => {
+      expect(
+        sortDogsAlphabetically(
+          [
+            {
+              img: "https://frontend-take-home.fetch.com/dog-images/n02110627-affenpinscher/n02110627_10225.jpg",
+              name: "Yolanda",
+              age: 13,
+              breed: "Affenpinscher",
+              zip_code: "21056",
+              id: "NXGFTIcBOvEgQ5OCx8A1",
+            },
+            {
+              img: "https://frontend-take-home.fetch.com/dog-images/n02110627-affenpinscher/n02110627_10437.jpg",
+              name: "Wendell",
+              age: 1,
+              breed: "Affenpinscher",
+              zip_code: "06104",
+              id: "NnGFTIcBOvEgQ5OCx8A1",
+            },
+            {
+              img: "https://frontend-take-home.fetch.com/dog-images/n02110627-affenpinscher/n02110627_11365.jpg",
+              name: "Lea",
+              age: 11,
+              breed: "Affenpinscher",
+              zip_code: "36032",
+              id: "RHGFTIcBOvEgQ5OCx8A1",
+            },
+          ],
+          SortType.DESC
+        )
+      ).toEqual([
+        {
+          img: "https://frontend-take-home.fetch.com/dog-images/n02110627-affenpinscher/n02110627_10225.jpg",
+          name: "Yolanda",
+          age: 13,
+          breed: "Affenpinscher",
+          zip_code: "21056",
+          id: "NXGFTIcBOvEgQ5OCx8A1",
+        },
+        {
+          img: "https://frontend-take-home.fetch.com/dog-images/n02110627-affenpinscher/n02110627_10437.jpg",
+          name: "Wendell",
+          age: 1,
+          breed: "Affenpinscher",
+          zip_code: "06104",
+          id: "NnGFTIcBOvEgQ5OCx8A1",
+        },
+        {
+          img: "https://frontend-take-home.fetch.com/dog-images/n02110627-affenpinscher/n02110627_11365.jpg",
+          name: "Lea",
+          age: 11,
+          breed: "Affenpinscher",
+          zip_code: "36032",
+          id: "RHGFTIcBOvEgQ5OCx8A1",
+        },
+      ]);
     });
   });
 });

@@ -1,5 +1,6 @@
 import { ElementsPerPage } from "../constants/dog";
-import { PaginationData, SelectItem } from "../types/general";
+import { Dog } from "../types/dog";
+import { PaginationData, SelectItem, SortType } from "../types/general";
 
 /**
  * Generates the structure for the select input options.
@@ -51,4 +52,28 @@ export function getPageAndOffset(
     nextPage,
     nextOffset,
   };
+}
+
+/**
+ * Sorts the dogs alphabetically by their names.
+ * If no type is provided then it's A-Z, if DESC
+ * is set as type then Z-A is the order
+ * @param dogs array of dogs to be sorted
+ * @param type ASC or desc
+ */
+export function sortDogsAlphabetically(
+  dogs: Dog[],
+  type: SortType = SortType.ASC
+): Dog[] {
+  dogs.sort((a, b) => {
+    const isAsc = type === SortType.ASC;
+    if (a.name < b.name) {
+      return isAsc ? -1 : 1;
+    }
+    if (a.name > b.name) {
+      return isAsc ? 1 : -1;
+    }
+    return 0;
+  });
+  return dogs;
 }

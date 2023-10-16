@@ -9,11 +9,13 @@ function IconButton({
   iconName,
   size,
   title,
+  onPress,
 }: IconButtonProps) {
   return (
     <button
       aria-label={title}
       className={`icon-buton-container ${containerStyles}`}
+      onClick={onPress}
     >
       <FontAwesomeIcon size={size} icon={iconName} />
       <span className="icon-buton-container__title">{title}</span>

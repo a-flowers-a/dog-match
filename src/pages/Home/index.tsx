@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { faArrowDownAZ, faPaw } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowDownAZ,
+  faArrowDownZA,
+  faPaw,
+} from "@fortawesome/free-solid-svg-icons";
 //Components
 import ListCard from "../../components/molecules/ListCard";
 import IconButton from "../../components/atoms/IconButton";
@@ -11,12 +15,13 @@ import {
   generateBreedSelectOptions,
   getMaxNumPages,
   getPageAndOffset,
+  sortDogsAlphabetically,
 } from "../../helpers/utils";
 //Services
 import { getBreeds, getDogsIDs, getDogs } from "../../services/dog";
 //Types
 import { Dog } from "../../types/dog";
-import { SelectItem } from "../../types/general";
+import { SelectItem, SortType } from "../../types/general";
 //Styles
 import "../../globalStyles/shared.scss";
 import "./styles.scss";
@@ -27,8 +32,24 @@ function Home() {
   const [currentBreed, setCurrentBreed] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalDogs, setTotalDogs] = useState(0);
+  const [currSort, setCurrSort] = useState<SortType>(SortType.ASC);
 
   const totalPages = useMemo(() => getMaxNumPages(totalDogs), [totalDogs]);
+  const iconName = useMemo(
+    () => (currSort === SortType.ASC ? faArrowDownAZ : faArrowDownZA),
+    [currSort]
+  );
+
+  /**
+   * Sorts the current array of dogs to show with the new sort type and set
+   * the new sort type
+   */
+  const handleChangeSort = useCallback(() => {
+    const nextValue = currSort === SortType.ASC ? SortType.DESC : SortType.ASC;
+    const newSortedDogs = sortDogsAlphabetically(dogstToShow, nextValue);
+    setDogsToShow(newSortedDogs);
+    setCurrSort(nextValue);
+  }, [currSort, dogstToShow]);
 
   /**
    * Gets the dogsIds of the breed to search, then search the dogs with that ids
@@ -52,14 +73,15 @@ function Home() {
         const recDogsIds = await getDogsIDs(`breeds=${breedToSearch}`, 0);
         setTotalDogs(recDogsIds.total);
         const recDogs = await getDogs(recDogsIds.resultIds);
-        setDogsToShow(recDogs);
+        const sortedDogs = sortDogsAlphabetically(recDogs, currSort);
+        setDogsToShow(sortedDogs);
         setCurrentBreed(breedToSearch);
         setCurrentPage(1);
       } catch (error) {
         console.log("error at handleFetchDogs", error);
       }
     },
-    [breedsOptions.length]
+    [breedsOptions.length, currSort]
   );
 
   /**
@@ -94,13 +116,14 @@ function Home() {
           setTotalDogs(recDogsIds.total);
         }
         const recDogs = await getDogs(recDogsIds.resultIds);
-        setDogsToShow(recDogs);
+        const sortedDogs = sortDogsAlphabetically(recDogs, currSort);
+        setDogsToShow(sortedDogs);
         setCurrentPage(nextPage);
       } catch (error) {
         console.log("error at handlePagination", error);
       }
     },
-    [currentBreed, currentPage, totalDogs, totalPages]
+    [currSort, currentBreed, currentPage, totalDogs, totalPages]
   );
 
   useEffect(() => {
@@ -113,9 +136,9 @@ function Home() {
       <div className="home-container__actions-container">
         <IconButton
           containerStyles="home-container__sort-container"
-          title="Sort DSC"
-          iconName={faArrowDownAZ}
-          onPress={() => null}
+          title={currSort}
+          iconName={iconName}
+          onPress={handleChangeSort}
         />
         <FilterSelect
           options={breedsOptions}

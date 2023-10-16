@@ -7,3 +7,8 @@ export interface PaginationData {
   nextPage: number;
   nextOffset: number;
 }
+
+export enum SortType {
+  ASC = "asc",
+  DESC = "desc",
+}
