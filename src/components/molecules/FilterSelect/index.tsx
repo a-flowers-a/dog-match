@@ -7,6 +7,9 @@ import { FilterSelectProps } from "./types";
 import "./styles.scss";
 
 function FilterSelect({ options, handleOnChange }: FilterSelectProps) {
+  if (options.length === 0) {
+    return null;
+  }
   return (
     <div className="filter-select-container">
       <div className="filter-select-container__icon-container">
