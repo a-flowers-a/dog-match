@@ -28,8 +28,6 @@ function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalDogs, setTotalDogs] = useState(0);
 
-  const [dogsIds, setDogsIds] = useState<string[]>([]);
-
   const totalPages = useMemo(() => getMaxNumPages(totalDogs), [totalDogs]);
 
   /**
@@ -52,13 +50,11 @@ function Home() {
           breedToSearch = searchedBreeds[0];
         }
         const recDogsIds = await getDogsIDs(`breeds=${breedToSearch}`, 0);
-        console.log("recDogsIds>>", recDogsIds);
-        setDogsIds(recDogsIds.resultIds);
         setTotalDogs(recDogsIds.total);
         const recDogs = await getDogs(recDogsIds.resultIds);
-        console.log("recDogs>>", recDogs);
         setDogsToShow(recDogs);
         setCurrentBreed(breedToSearch);
+        setCurrentPage(1);
       } catch (error) {
         console.log("error at handleFetchDogs", error);
       }
@@ -78,15 +74,33 @@ function Home() {
     [currentBreed, handleFetchDogs]
   );
 
+  /**
+   * Gets the elements pagination needed and performs the requests to get the
+   * new dogs to show
+   */
   const handlePagination = useCallback(
     async (type: "prev" | "next") => {
       try {
-        //TODO:offset must be in the request to getDogsIds
+        const { nextOffset, nextPage } = getPageAndOffset(
+          type,
+          currentPage,
+          totalPages
+        );
+        const recDogsIds = await getDogsIDs(
+          `breeds=${currentBreed}`,
+          nextOffset
+        );
+        if (recDogsIds.total !== totalDogs) {
+          setTotalDogs(recDogsIds.total);
+        }
+        const recDogs = await getDogs(recDogsIds.resultIds);
+        setDogsToShow(recDogs);
+        setCurrentPage(nextPage);
       } catch (error) {
         console.log("error at handlePagination", error);
       }
     },
-    [currentPage, totalPages]
+    [currentBreed, currentPage, totalDogs, totalPages]
   );
 
   useEffect(() => {
@@ -114,7 +128,7 @@ function Home() {
         ))}
         <div className="home-container__paginator-container">
           <Paginator
-            pagesData={{ total: 30, currentPage: 1 }}
+            pagesData={{ total: totalPages, currentPage }}
             handlePagination={handlePagination}
           />
         </div>
