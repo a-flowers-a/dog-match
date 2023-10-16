@@ -1,5 +1,6 @@
-.home-container {
+@use 'src/globalStyles/medias.scss' as *;
 
+.home-container {
   &__actions-container {
     display: flex;
     align-items: center;
@@ -13,6 +14,15 @@
 
   &__list-container {
     width: 100%;
+
+    @include landscape{
+      width: 90%;
+      max-width: 500px;
+    }
+    @include tablet{
+      width: 80%;
+      max-width: 600px;
+    }
   }
 
   &__paginator-container {
