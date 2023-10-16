@@ -6,3 +6,10 @@ export interface Dog {
   zip_code: string;
   breed: string;
 }
+
+export interface DogsIdsResponse {
+  resultIds: string[];
+  total: number;
+  next: number;
+  prev: number;
+}
