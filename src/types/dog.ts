@@ -10,8 +10,8 @@ export interface Dog {
 export interface DogsIdsResponse {
   resultIds: string[];
   total: number;
-  next: number;
-  prev: number;
+  next: string;
+  prev?: number;
 }
 
 export interface MatchResponse {
