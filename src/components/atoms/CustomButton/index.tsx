@@ -5,6 +5,7 @@ import { CustomButtonProps } from "./types";
 import "./styles.scss";
 
 function CustomButton({
+  containerStyles,
   disabled,
   iconName,
   title,
@@ -13,7 +14,7 @@ function CustomButton({
   return (
     <button
       aria-label={title}
-      className="custom-button-container"
+      className={`custom-button-container ${containerStyles}`}
       disabled={disabled}
       onClick={handlePress}
     >

@@ -23,6 +23,7 @@
   }
   &:hover:enabled {
     box-shadow: rgba(0, 0, 0, 0.25) 0px 10px 10px;
+    cursor: pointer;
   }
   &:disabled{
     background-color: colors.$grey;
