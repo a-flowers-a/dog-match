@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   faCakeCandles,
   faHeart,
@@ -11,26 +10,11 @@ import { Color } from "../../../types/colors";
 //Styles
 import "./styles.scss";
 
-function ListCard({ dogData, handleOnPress }: ListCardProps) {
-  /**
-   * NOTE: to know the real starting fav state, this should be passed in dogData
-   * otherwise, every rerender, the visual state of fav will be false
-   */
-  const [isVisuallyFav, setIsVisuallyFav] = useState(false);
-
-  const favColor = isVisuallyFav ? Color.secondary : Color.grey;
-
-  /**
-   * Changes the visual fav state and calls the parent callback to handle
-   * fav logic
-   */
-  function handleOnClick() {
-    setIsVisuallyFav((prevVal) => !prevVal);
-    handleOnPress();
-  }
+function ListCard({ dogData, isFav, handleOnPress }: ListCardProps) {
+  const favColor = isFav ? Color.secondary : Color.grey;
 
   return (
-    <button className="list-card-container" onClick={handleOnClick}>
+    <button className="list-card-container" onClick={handleOnPress}>
       <div className="list-card-container__img-container">
         <img
           className="list-card-container__img"

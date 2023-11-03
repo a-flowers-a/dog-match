@@ -46,7 +46,9 @@ function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalDogs, setTotalDogs] = useState(0);
   const [currSort, setCurrSort] = useState<SortType>(SortType.ASC);
-  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+  const [favoritesSet, setFavoritesSet] = useState<Set<string>>(
+    new Set<string>()
+  );
   const [matchedDog, setMatchedDog] = useState<Dog>();
   const [displayMatch, setDisplayMatch] = useState(false);
 
@@ -58,23 +60,20 @@ function Home() {
   const showMatchedDog = matchedDog && displayMatch;
 
   /**
-   * Adds/removes DogId to/from the fav array.
-   * If it's not in the favArr it's added, otherwise removed
+   * Adds/removes DogId to/from the fav set.
+   * If it's not in the fav set it's added, otherwise removed
    */
   const handleAddFav = useCallback(
     (favId: string) => {
-      const foundIndex = favoriteIds.indexOf(favId);
-      if (foundIndex === -1) {
-        setFavoriteIds((prevFavs) => [...prevFavs, favId]);
+      const updatedSet = new Set(favoritesSet);
+      if (!favoritesSet.has(favId)) {
+        updatedSet.add(favId);
       } else {
-        setFavoriteIds(
-          favoriteIds
-            .slice(0, foundIndex)
-            .concat(favoriteIds.slice(foundIndex + 1))
-        );
+        updatedSet.delete(favId);
       }
+      setFavoritesSet(updatedSet);
     },
-    [favoriteIds]
+    [favoritesSet]
   );
 
   /**
@@ -144,7 +143,7 @@ function Home() {
   const handleGenerateMatch = useCallback(async () => {
     try {
       setLoader(true);
-      const matchRes = await matchDogs(favoriteIds);
+      const matchRes = await matchDogs(Array.from(favoritesSet));
       const recDog = await getDogs([matchRes.match]);
       setMatchedDog(recDog[0]);
       setDisplayMatch(true);
@@ -154,7 +153,7 @@ function Home() {
     } finally {
       setLoader(false);
     }
-  }, [favoriteIds, setLoader, setMessage, setShowErrorModal]);
+  }, [favoritesSet, setLoader, setMessage, setShowErrorModal]);
 
   /**
    * Gets the elements pagination needed and performs the requests to get the
@@ -224,6 +223,7 @@ function Home() {
         {dogstToShow.map((dog) => (
           <ListCard
             key={dog.id}
+            isFav={favoritesSet.has(dog.id)}
             dogData={dog}
             handleOnPress={() => handleAddFav(dog.id)}
           />
@@ -237,7 +237,7 @@ function Home() {
       </div>
       <div className="home-container__match-btn-container">
         <CustomButton
-          disabled={favoriteIds.length < 1}
+          disabled={favoritesSet.size < 1}
           iconName={faPaw}
           title="generate match"
           handlePress={handleGenerateMatch}
