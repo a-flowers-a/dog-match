@@ -1,15 +1,17 @@
 import { useNavigate } from "react-router-dom";
 //COmponents
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import LoginCard from "../../components/molecules/LoginCard";
 import { LoginData } from "../../types/authentication";
 //Context
 import { AuthContext } from "../../context/AuthProvider/context";
 import { LoaderContext } from "../../context/LoaderProvider/context";
 import { ErrorModalContext } from "../../context/ErrorModal/context";
-//Services
+//Services & helpers
 import { login } from "../../services/authentication";
+import { setStorageItem } from "../../helpers/storage";
 //Types & Consts
+import { SessionStorageItem, StorageKey } from "../../types/storage";
 import { RoutePath } from "../../constants/routes";
 import { ErrorMessage } from "../../constants/messages";
 //Styles
@@ -22,6 +24,7 @@ function SignIn() {
     actions: { setLoader },
   } = LoaderContext();
   const {
+    state: { isAuthenticated },
     actions: { setAuthState },
   } = AuthContext();
   const {
@@ -38,6 +41,11 @@ function SignIn() {
       try {
         setLoader(true);
         await login(loginData);
+        const sessionStItem: SessionStorageItem = {
+          key: StorageKey.Session,
+          value: true,
+        };
+        setStorageItem(sessionStItem);
         setAuthState({ isAuthenticated: true });
         setLoader(false);
         navigate(RoutePath.Home);
@@ -49,6 +57,13 @@ function SignIn() {
     },
     [navigate, setAuthState, setLoader, setMessage, setShow]
   );
+
+  //Handle navigation if logged
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(RoutePath.Home);
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <div className="base-page sign-in-container">

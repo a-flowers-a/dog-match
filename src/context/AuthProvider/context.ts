@@ -1,8 +1,12 @@
 import { createContext, useContext } from "react";
+//Helpers
+import { getStorageItem } from "../../helpers/storage";
+//Types
 import { AuthState, AuthStateContext } from "./types";
+import { StorageKey } from "../../types/storage";
 
 const AuthInitialState: AuthState = {
-  isAuthenticated: false,
+  isAuthenticated: !!getStorageItem(StorageKey.Session),
 };
 
 const CreatedAuthContext = createContext<AuthStateContext>({
