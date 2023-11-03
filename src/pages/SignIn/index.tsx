@@ -6,10 +6,12 @@ import { LoginData } from "../../types/authentication";
 //Context
 import { AuthContext } from "../../context/AuthProvider/context";
 import { LoaderContext } from "../../context/LoaderProvider/context";
+import { ErrorModalContext } from "../../context/ErrorModal/context";
 //Services
 import { login } from "../../services/authentication";
 //Types & Consts
 import { RoutePath } from "../../constants/routes";
+import { ErrorMessage } from "../../constants/messages";
 //Styles
 import "../../globalStyles/shared.scss";
 import "./styles.scss";
@@ -22,6 +24,9 @@ function SignIn() {
   const {
     actions: { setAuthState },
   } = AuthContext();
+  const {
+    actions: { setShow, setMessage },
+  } = ErrorModalContext();
 
   const navigate = useNavigate();
 
@@ -36,12 +41,13 @@ function SignIn() {
         setAuthState({ isAuthenticated: true });
         setLoader(false);
         navigate(RoutePath.Home);
-      } catch (error) {
+      } catch (error: any) {
         setLoader(false);
-        console.log("error at handleLogin", error);
+        setMessage(error?.message || ErrorMessage.Login);
+        setShow(true);
       }
     },
-    [navigate, setAuthState, setLoader]
+    [navigate, setAuthState, setLoader, setMessage, setShow]
   );
 
   return (

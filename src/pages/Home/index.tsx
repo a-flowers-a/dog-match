@@ -13,6 +13,7 @@ import CustomButton from "../../components/atoms/CustomButton";
 import MatchModal from "../../components/molecules/MatchModal";
 //Context
 import { LoaderContext } from "../../context/LoaderProvider/context";
+import { ErrorModalContext } from "../../context/ErrorModal/context";
 //helpers
 import {
   generateBreedSelectOptions,
@@ -25,6 +26,7 @@ import { getBreeds, getDogsIDs, getDogs, matchDogs } from "../../services/dog";
 //Types
 import { Dog } from "../../types/dog";
 import { SelectItem, SortType } from "../../types/general";
+import { ErrorMessage } from "../../constants/messages";
 //Styles
 import "../../globalStyles/shared.scss";
 import "./styles.scss";
@@ -34,6 +36,9 @@ function Home() {
   const {
     actions: { setLoader },
   } = LoaderContext();
+  const {
+    actions: { setShow: setShowErrorModal, setMessage },
+  } = ErrorModalContext();
 
   const [dogstToShow, setDogsToShow] = useState<Dog[]>([]);
   const [breedsOptions, setBreedsOptions] = useState<SelectItem[]>([]);
@@ -111,12 +116,13 @@ function Home() {
         setCurrentBreed(breedToSearch);
         setCurrentPage(1);
       } catch (error) {
-        console.log("error at handleFetchDogs", error);
+        setMessage(ErrorMessage.FetchBreed);
+        setShowErrorModal(true);
       } finally {
         setLoader(false);
       }
     },
-    [breedsOptions.length, currSort, setLoader]
+    [breedsOptions.length, currSort, setLoader, setMessage, setShowErrorModal]
   );
 
   /**
@@ -143,11 +149,12 @@ function Home() {
       setMatchedDog(recDog[0]);
       setDisplayMatch(true);
     } catch (error) {
-      console.log("error at handleGenerateMatch", error);
+      setMessage(ErrorMessage.GenerateMatch);
+      setShowErrorModal(true);
     } finally {
       setLoader(false);
     }
-  }, [favoriteIds, setLoader]);
+  }, [favoriteIds, setLoader, setMessage, setShowErrorModal]);
 
   /**
    * Gets the elements pagination needed and performs the requests to get the
@@ -173,10 +180,19 @@ function Home() {
         setDogsToShow(sortedDogs);
         setCurrentPage(nextPage);
       } catch (error) {
-        console.log("error at handlePagination", error);
+        setMessage(ErrorMessage.DogsPagination);
+        setShowErrorModal(true);
       }
     },
-    [currSort, currentBreed, currentPage, totalDogs, totalPages]
+    [
+      currSort,
+      currentBreed,
+      currentPage,
+      setMessage,
+      setShowErrorModal,
+      totalDogs,
+      totalPages,
+    ]
   );
 
   useEffect(() => {
