@@ -5,7 +5,7 @@ import LoginCard from "../../components/molecules/LoginCard";
 import { LoginData } from "../../types/authentication";
 //Context
 import { AuthContext } from "../../context/AuthProvider/context";
-import { LoaderContext } from "../../context/AuthProvider/LoaderProvider/context";
+import { LoaderContext } from "../../context/LoaderProvider/context";
 //Services
 import { login } from "../../services/authentication";
 //Types & Consts

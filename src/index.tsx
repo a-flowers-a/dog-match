@@ -6,7 +6,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 //Context Providers
 import AuthProvider from "./context/AuthProvider";
-import LoaderProvider from "./context/AuthProvider/LoaderProvider";
+import LoaderProvider from "./context/LoaderProvider";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

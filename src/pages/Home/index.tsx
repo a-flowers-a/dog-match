@@ -12,7 +12,7 @@ import Paginator from "../../components/atoms/Paginator";
 import CustomButton from "../../components/atoms/CustomButton";
 import MatchModal from "../../components/molecules/MatchModal";
 //Context
-import { LoaderContext } from "../../context/AuthProvider/LoaderProvider/context";
+import { LoaderContext } from "../../context/LoaderProvider/context";
 //helpers
 import {
   generateBreedSelectOptions,

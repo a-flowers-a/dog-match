@@ -6,7 +6,7 @@ import ProtectedRoute from "./components/atoms/ProtectedRoute";
 import Loader from "./components/molecules/Loader";
 //Context
 import { AuthContext } from "./context/AuthProvider/context";
-import { LoaderContext } from "./context/AuthProvider/LoaderProvider/context";
+import { LoaderContext } from "./context/LoaderProvider/context";
 //Types & Constants
 import { RoutePath } from "./constants/routes";
 
@@ -17,6 +17,7 @@ function App() {
   const {
     state: { loading },
   } = LoaderContext();
+
   return (
     <>
       <Loader show={loading} />
