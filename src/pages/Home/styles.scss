@@ -1,15 +1,16 @@
 @use 'src/globalStyles/medias.scss' as *;
 
 .home-container {
-  &__actions-container {
+
+  &__logout-container{
+    width: 100%;
     display: flex;
-    align-items: center;
-    flex-direction: row;
-    margin-bottom: 25px;
+    justify-content: flex-end;
+    margin-bottom: 50px;
   }
 
-  &__sort-container{
-    margin-right: 10px;
+  &__logout-button{
+    width: 150px;
   }
 
   &__list-container {
@@ -23,6 +24,18 @@
       width: 80%;
       max-width: 600px;
     }
+  }
+
+  &__actions-container {
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+    flex-direction: row;
+    margin-bottom: 25px;
+  }
+
+  &__sort-container{
+    margin-right: 10px;
   }
 
   &__paginator-container {

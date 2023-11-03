@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   faArrowDownAZ,
   faArrowDownZA,
+  faArrowRightFromBracket,
   faPaw,
 } from "@fortawesome/free-solid-svg-icons";
 //Components
@@ -14,6 +16,7 @@ import MatchModal from "../../components/molecules/MatchModal";
 //Context
 import { LoaderContext } from "../../context/LoaderProvider/context";
 import { ErrorModalContext } from "../../context/ErrorModal/context";
+import { AuthContext } from "../../context/AuthProvider/context";
 //helpers
 import {
   generateBreedSelectOptions,
@@ -21,15 +24,28 @@ import {
   getPageAndOffset,
   sortDogsAlphabetically,
 } from "../../helpers/utils";
+import { setStorageItem } from "../../helpers/storage";
 //Services
 import { getBreeds, getDogsIDs, getDogs, matchDogs } from "../../services/dog";
+import { logout } from "../../services/authentication";
 //Types
 import { Dog } from "../../types/dog";
 import { SelectItem, SortType } from "../../types/general";
+import { SessionStorageItem, StorageKey } from "../../types/storage";
 import { ErrorMessage } from "../../constants/messages";
+import { RoutePath } from "../../constants/routes";
 //Styles
 import "../../globalStyles/shared.scss";
 import "./styles.scss";
+/**
+ * Example data
+import { ExampleBreeds } from "../../exampleData/breed";
+import {
+  ExampleDogs,
+  ExampleDogsIdResponse,
+  ExampleMatch,
+} from "../../exampleData/dogs";
+*/
 
 function Home() {
   //Context
@@ -39,6 +55,11 @@ function Home() {
   const {
     actions: { setShow: setShowErrorModal, setMessage },
   } = ErrorModalContext();
+  const {
+    actions: { setAuthState },
+  } = AuthContext();
+
+  const navigate = useNavigate();
 
   const [dogstToShow, setDogsToShow] = useState<Dog[]>([]);
   const [breedsOptions, setBreedsOptions] = useState<SelectItem[]>([]);
@@ -156,6 +177,28 @@ function Home() {
   }, [favoritesSet, setLoader, setMessage, setShowErrorModal]);
 
   /**
+   * Calls to invalidate session, reset session data in context
+   * and move back to signIn page
+   */
+  const handleLogout = async () => {
+    const sessionStItem: SessionStorageItem = {
+      key: StorageKey.Session,
+      value: false,
+    };
+    try {
+      setLoader(true);
+      await logout();
+    } catch (error) {
+      console.log("error at logout", error);
+    } finally {
+      setStorageItem(sessionStItem);
+      setAuthState({ isAuthenticated: false });
+      setLoader(false);
+      navigate(RoutePath.SignIn);
+    }
+  };
+
+  /**
    * Gets the elements pagination needed and performs the requests to get the
    * new dogs to show
    */
@@ -207,19 +250,27 @@ function Home() {
           dogData={matchedDog}
         />
       )}
-      <div className="home-container__actions-container">
-        <IconButton
-          containerStyles="home-container__sort-container"
-          title={currSort}
-          iconName={iconName}
-          onPress={handleChangeSort}
-        />
-        <FilterSelect
-          options={breedsOptions}
-          handleOnChange={(event) => handleBreedChange(event.target.value)}
+      <div className="home-container__logout-container">
+        <CustomButton
+          containerStyles="home-container__logout-button"
+          iconName={faArrowRightFromBracket}
+          title="Logout"
+          handlePress={handleLogout}
         />
       </div>
       <div className="home-container__list-container">
+        <div className="home-container__actions-container">
+          <IconButton
+            containerStyles="home-container__sort-container"
+            title={currSort}
+            iconName={iconName}
+            onPress={handleChangeSort}
+          />
+          <FilterSelect
+            options={breedsOptions}
+            handleOnChange={(event) => handleBreedChange(event.target.value)}
+          />
+        </div>
         {dogstToShow.map((dog) => (
           <ListCard
             key={dog.id}

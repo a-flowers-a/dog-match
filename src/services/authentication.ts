@@ -19,3 +19,17 @@ export function login(loginData: LoginData): Promise<void> {
     withCredentials: true,
   }) as Promise<void>;
 }
+
+/**
+ * Performs a POST request to invalidate the auth cookie (user's session)
+ * @returns Promise void
+ */
+export function logout(): Promise<void> {
+  const url = `${BaseUrl}/auth/logout`;
+  const axiosAgent = HttppAgent.getAgent();
+  return axiosAgent.doRequest({
+    method: "POST",
+    url,
+    withCredentials: true,
+  }) as Promise<void>;
+}
