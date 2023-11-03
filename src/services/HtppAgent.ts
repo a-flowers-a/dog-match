@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
 /**
  * Basic Http agent using axios client implementing Singleton Pattern
@@ -21,18 +21,11 @@ class HttppAgent {
   /**
    * Performs request using axios client with the given config
    * @param requestConfig axios request config
-   * @returns Promise with the response data or error message
+   * @returns Promise with the response data
    */
-  doRequest(requestConfig: AxiosRequestConfig): Promise<unknown> {
-    return new Promise((resolve, reject) => {
-      axios(requestConfig)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error: AxiosError) => {
-          reject(error?.message);
-        });
-    });
+  async doRequest(requestConfig: AxiosRequestConfig): Promise<unknown> {
+    const response = await axios(requestConfig);
+    return response.data;
   }
 }
 
