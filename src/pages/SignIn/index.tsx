@@ -5,6 +5,7 @@ import LoginCard from "../../components/molecules/LoginCard";
 import { LoginData } from "../../types/authentication";
 //Context
 import { AuthContext } from "../../context/AuthProvider/context";
+import { LoaderContext } from "../../context/AuthProvider/LoaderProvider/context";
 //Services
 import { login } from "../../services/authentication";
 //Types & Consts
@@ -15,6 +16,9 @@ import "./styles.scss";
 
 function SignIn() {
   //Context
+  const {
+    actions: { setLoader },
+  } = LoaderContext();
   const {
     actions: { setAuthState },
   } = AuthContext();
@@ -27,14 +31,17 @@ function SignIn() {
   const handleLogin = useCallback(
     async (loginData: LoginData) => {
       try {
+        setLoader(true);
         await login(loginData);
         setAuthState({ isAuthenticated: true });
+        setLoader(false);
         navigate(RoutePath.Home);
       } catch (error) {
+        setLoader(false);
         console.log("error at handleLogin", error);
       }
     },
-    [navigate, setAuthState]
+    [navigate, setAuthState, setLoader]
   );
 
   return (

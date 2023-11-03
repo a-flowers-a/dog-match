@@ -11,6 +11,8 @@ import FilterSelect from "../../components/molecules/FilterSelect";
 import Paginator from "../../components/atoms/Paginator";
 import CustomButton from "../../components/atoms/CustomButton";
 import MatchModal from "../../components/molecules/MatchModal";
+//Context
+import { LoaderContext } from "../../context/AuthProvider/LoaderProvider/context";
 //helpers
 import {
   generateBreedSelectOptions,
@@ -28,6 +30,11 @@ import "../../globalStyles/shared.scss";
 import "./styles.scss";
 
 function Home() {
+  //Context
+  const {
+    actions: { setLoader },
+  } = LoaderContext();
+
   const [dogstToShow, setDogsToShow] = useState<Dog[]>([]);
   const [breedsOptions, setBreedsOptions] = useState<SelectItem[]>([]);
   const [currentBreed, setCurrentBreed] = useState("");
@@ -85,6 +92,7 @@ function Home() {
   const handleFetchDogs = useCallback(
     async (breed?: string) => {
       try {
+        setLoader(true);
         let breedToSearch;
         if (breed) {
           breedToSearch = breed;
@@ -104,9 +112,11 @@ function Home() {
         setCurrentPage(1);
       } catch (error) {
         console.log("error at handleFetchDogs", error);
+      } finally {
+        setLoader(false);
       }
     },
-    [breedsOptions.length, currSort]
+    [breedsOptions.length, currSort, setLoader]
   );
 
   /**
@@ -127,14 +137,17 @@ function Home() {
    */
   const handleGenerateMatch = useCallback(async () => {
     try {
+      setLoader(true);
       const matchRes = await matchDogs(favoriteIds);
       const recDog = await getDogs([matchRes.match]);
       setMatchedDog(recDog[0]);
       setDisplayMatch(true);
     } catch (error) {
       console.log("error at handleGenerateMatch", error);
+    } finally {
+      setLoader(false);
     }
-  }, [favoriteIds]);
+  }, [favoriteIds, setLoader]);
 
   /**
    * Gets the elements pagination needed and performs the requests to get the
