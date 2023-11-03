@@ -7,6 +7,7 @@ import reportWebVitals from "./reportWebVitals";
 //Context Providers
 import AuthProvider from "./context/AuthProvider";
 import LoaderProvider from "./context/LoaderProvider";
+import ErrorModalProvider from "./context/ErrorModal";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -16,9 +17,11 @@ root.render(
   <React.StrictMode>
     <AuthProvider>
       <LoaderProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <ErrorModalProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ErrorModalProvider>
       </LoaderProvider>
     </AuthProvider>
   </React.StrictMode>
