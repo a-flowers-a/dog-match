@@ -1,3 +1,18 @@
+@use 'src/globalStyles/colors.scss' as colors;
+
 .sign-in-container{
   justify-content: center;
+
+  &__note{
+    display: flex;
+    align-items: center;
+    color: colors.$text-primary-light;
+    margin-top: 40px;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  &__info-icon{
+    margin-right: 10px;
+  }
 }

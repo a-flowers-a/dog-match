@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 //COmponents
 import { useCallback, useEffect } from "react";
 import LoginCard from "../../components/molecules/LoginCard";
@@ -68,6 +70,13 @@ function SignIn() {
   return (
     <div className="base-page sign-in-container">
       <LoginCard handleSubmit={handleLogin} />
+      <div className="sign-in-container__note">
+        <FontAwesomeIcon
+          className="sign-in-container__info-icon"
+          icon={faCircleInfo}
+        />
+        <p>You don't need to SignUp or even use real credentials</p>
+      </div>
     </div>
   );
 }
