@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaw } from "@fortawesome/free-solid-svg-icons";
 //Types
 import { LoginCardProps } from "./types";
-import { InputName } from "../../../constants/inputs";
+import { EmailRegex, InputName } from "../../../constants/inputs";
 import { LoginData } from "../../../types/authentication";
 //Styles
 import "./styles.scss";
@@ -13,15 +13,23 @@ function LoginCard({ handleSubmit }: LoginCardProps) {
     [InputName.Name]: "",
     [InputName.Mail]: "",
   });
+  const [validEmail, setValidEmail] = useState(true);
 
   const disabled =
-    formData[InputName.Mail] === "" || formData[InputName.Name] === "";
+    formData[InputName.Mail] === "" ||
+    formData[InputName.Name] === "" ||
+    !validEmail;
 
   /**
-   * Sets the changed values for each
+   * Sets the changed values for each input
+   * And validates the email string
    * @param event HTML input change event
    */
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+    if (event.target.name === InputName.Mail) {
+      const match = !!event.target.value.match(EmailRegex);
+      setValidEmail(match);
+    }
     setFormData((prevVal) => ({
       ...prevVal,
       [event.target.name]: event.target.value,
@@ -58,6 +66,11 @@ function LoginCard({ handleSubmit }: LoginCardProps) {
             type="mail"
             onChange={handleInputChange}
           />
+          {!validEmail && (
+            <span className="login-card-container__input-error">
+              Please enter a valid email string
+            </span>
+          )}
         </div>
         <button
           aria-label="login"

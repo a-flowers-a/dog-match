@@ -33,6 +33,12 @@
     margin-top: 3px;
   }
 
+  &__input-error{
+    margin-top: 3px;
+    color: colors.$secondary;
+    font-size: 14px;
+  }
+
   &__btn{
     margin-top: 25px;
     width: 100%;
