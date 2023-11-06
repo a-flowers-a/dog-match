@@ -4,7 +4,7 @@ Web frontend app challenge that shows list of dogs that can be adopted. The user
 
 There's a login page, however you don't need to Sign Up or even use real credentials. Just ensure that the email value is a valid email string.
 
-[See the app up and running]().
+[See the app up and running](https://precious-platypus-d8bb5c.netlify.app/).
 
 This frontend app project uses React library and was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 <br>
