@@ -4,4 +4,4 @@ export enum InputName {
   Name = "name",
 }
 
-export const EmailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+export const EmailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g;
